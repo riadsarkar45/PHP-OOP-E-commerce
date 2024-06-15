@@ -8,19 +8,7 @@ foreach ($_SESSION['userData'] as $key => $value) {
 $chatHistory = $chatMessages->getChatMessages($login_user_id, $_GET['c']);
 $chatList = $chatMessages->getChatLists($login_user_id, $_GET['c'], $login_user_id);
 $msg = '';
-if (isset($_POST['send'])) {
-    $chatRooms = new Chat_rooms('../../admin2/includes/database_connection.php');
 
-    $senderId = $chatRooms->setSenderId($login_user_id);
-    $receiverId = $chatRooms->setReceiverId($_GET['c']);
-    $message = $chatRooms->setMessage($_POST['message']);
-    $userId = $chatRooms->setUserId($login_user_id);
-    if ($chatRooms->insertChat()) {
-        $msg = '';
-    } else {
-        $msg = 'Failed to send the message. Please try again later.';
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,45 +32,47 @@ if (isset($_POST['send'])) {
             <input type="text" placeholder="Search or start a new chat" class="mt-4 w-full p-2 border rounded-md">
 
             <!-- Chat List -->
-            <div class="mt-4 space-y-4">
-                <?php
-                if ($chatList) {
-                    foreach ($chatList as $rows) {
-
-
-                ?>
-
-                        <?php if ($rows['receiver_Id'] == $login_user_id) { ?>
-                            <div class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
-                                <div class="flex-shrink-0">
-                                    <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
-                                </div>
-                                <div class="ml-3">
-                                    <h3 class="text-sm font-semibold"><?php echo $rows['sender_Id']; ?></h3>
-                                    <p class="text-xs text-gray-500"><?php echo $rows['msg']; ?></p>
-                                </div>
-                                <div class="ml-auto text-xs text-gray-500">6/1/2024</div>
-                            </div>
-                        <?php } elseif ($rows['sender_Id'] == $login_user_id) { ?>
-
-                            <div class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
-                                <div class="flex-shrink-0">
-                                    <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
-                                </div>
-                                <div class="ml-3">
-                                    <h3 class="text-sm font-semibold"><?php echo $rows['receiver_Id']; ?></h3>
-                                    <p class="text-xs text-gray-500"><?php echo $rows['msg']; ?></p>
-                                </div>
-                                <div class="ml-auto text-xs text-gray-500">6/1/2024</div>
-                            </div>
-                        <?php } ?>
-
+            <div>
+                <div id="chatted-lists" class="mt-4 space-y-4">
                     <?php
-                    }
-                } else { ?>
-                    <h2>You haven't chatted with someone. Start chatting now.</h2>
-                <?php } ?>
+                    if ($chatList) {
+                        foreach ($chatList as $rows) {
 
+
+                    ?>
+
+                            <?php if ($rows['receiver_Id'] == $login_user_id) { ?>
+                                <div class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                                    <div class="flex-shrink-0">
+                                        <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-semibold"><?php echo $rows['sender_Id']; ?></h3>
+                                        <p class="text-xs text-gray-500"><?php echo $rows['msg']; ?></p>
+                                    </div>
+                                    <div class="ml-auto text-xs text-gray-500">6/1/2024</div>
+                                </div>
+                            <?php } elseif ($rows['sender_Id'] == $login_user_id) { ?>
+
+                                <div class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
+                                    <div class="flex-shrink-0">
+                                        <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
+                                    </div>
+                                    <div class="ml-3">
+                                        <h3 class="text-sm font-semibold"><?php echo $rows['receiver_Id']; ?></h3>
+                                        <p class="text-xs text-gray-500"><?php echo $rows['msg']; ?></p>
+                                    </div>
+                                    <div class="ml-auto text-xs text-gray-500">6/1/2024</div>
+                                </div>
+                            <?php } ?>
+
+                        <?php
+                        }
+                    } else { ?>
+                        <h2>You haven't chatted with someone. Start chatting now.</h2>
+                    <?php } ?>
+
+                </div>
             </div>
         </div>
 
@@ -93,7 +83,7 @@ if (isset($_POST['send'])) {
                 <p class="text-sm text-gray-500">Last seen today at 5:39 PM</p>
             </div>
 
-            <div class="flex-1 overflow-y-auto p-4 space-y-4">
+            <div id="history" class="flex-1 overflow-y-auto p-4 space-y-4">
                 <?php
                 if ($chatHistory) {
                     foreach ($chatHistory as $rows) {
@@ -133,15 +123,78 @@ if (isset($_POST['send'])) {
 
                 <!-- Add more messages as needed -->
             </div>
-            <form action="chat.php?c=<?php echo $_GET['c'] ?>" method="POST">
-                <div class="flex-none p-4 border-t border-gray-200">
-                    <input type="text" placeholder="Type a message" name="message" class="w-full p-2 border rounded-md">
-                    <button type="submit" name="send">Send</button>
+            <form id="myForm" enctype="multipart/form-data">
+                <div class="chatbox-input flex p-2 gap-2">
+                    <i class="fa-regular fa-face-grin"></i>
+                    <i class="fa-sharp fa-solid fa-paperclip"></i>
+                    <input class="p-2 w-full" type="text" id="name" name="message" placeholder="Type a message">
+                    <button class="border p-1 rounded" type="submit">Send</button>
+
                 </div>
             </form>
         </div>
     </div>
 
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    
+
+    function get_chats_instantly() {
+        jQuery.ajax({
+            url: 'instant-chat-history.php?c=<?php echo $_GET['c']; ?>',
+            success: function(result) {
+                jQuery('#history').html(result);
+            }
+        });
+    }
+    setInterval(function() {
+        get_chats_instantly();
+    }, 1000);
+
+    function get_chatted_list_instantly() {
+        jQuery.ajax({
+            url: 'instant-chat-list.php?c=<?php echo $_GET['c']; ?>',
+            success: function(result) {
+                jQuery('#chatted-lists').html(result);
+            }
+        });
+    }
+    setInterval(function() {
+        get_chatted_list_instantly();
+    }, 1000);
+
+
+
+
+
+
+    $(document).ready(function() {
+      $('#myForm').submit(function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        $.ajax({
+          type: 'POST',
+          url: 'insert-chat.php?c=<?php echo $_GET['c']; ?>',
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function(response) {
+            $('#name').val('');
+            $('#file').val('');
+            $('#result').html(response);
+          },
+          error: function(xhr, status, error) {
+            alert('AJAX request error: ' + error);
+          }
+        });
+      });
+    });
+
+    
+</script>
 
 </html>

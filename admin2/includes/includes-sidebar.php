@@ -13,6 +13,7 @@
   <li class="cd-side__label  mt-10"><a href="add-products.php"><span>Admin Routes</span></a></li>
   <li class="cd-side__label text-3xl"><a href="all-users.php"><span>All Users</span></a></li>
   <li class="cd-side__label text-3xl"><a href="add-new-banner.php"><span>Add New Banner</span></a></li>
+  <li class="cd-side__label text-3xl"><a href="../public/chat/chat.php?c="><span>Messages</span></a></li>
   <!-- <li class="cd-side__label text-3xl"><a href="add-products.php"><span>Add New Delivery Men</span></a></li> -->
 
   </ul>

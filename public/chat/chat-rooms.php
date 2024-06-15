@@ -71,7 +71,6 @@ class Chat_rooms
             $stmt->execute();
             $all_post = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $found = false;
-
             foreach ($all_post as $rows) {
                 if ($rows['sender_Id'] == $this->userId && $rows['receiver_Id'] == $this->receiverId) {
                     $history = "UPDATE chat_list SET sender_Id = :sender_id, msg = :message, user_id = :user_id, status = 'OFF' WHERE sender_Id = :current_sender_id AND receiver_Id = :current_receiver_id";
