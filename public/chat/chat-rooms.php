@@ -143,4 +143,23 @@ class Chat_rooms
             return false;
         }
     }
+
+    public function fetchData($tableName, $whereColumn = NULL, $orderBy = NULL, $orderType)
+    {
+        $sql = "SELECT * FROM $tableName";
+        if ($whereColumn !== NULL) {
+            $sql .= " WHERE $whereColumn";
+        }
+        if ($orderBy !== NULL) {
+            $sql .= " ORDER BY $orderBy $orderType";
+        }
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($stmt->rowCount() > 0) {
+            return $results;
+        } else {
+            return false;
+        }
+    }
 }

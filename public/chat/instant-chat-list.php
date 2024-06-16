@@ -16,36 +16,59 @@ $chatList = $chatMessages->getChatLists($login_user_id, $_GET['c'], $login_user_
         foreach ($chatList as $rows) {
 
 
+
+
     ?>
 
             <?php if ($rows['receiver_Id'] == $login_user_id) { ?>
-                <a href="chat.php?c=<?php echo $rows['sender_Id'] ?>">
-                    <div class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
-                        <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
-                        </div>
-                        <div class="ml-3">
-                            <h3 class="text-sm font-semibold"><?php echo $rows['sender_Id']; ?></h3>
-                            <p class="text-xs text-gray-500"><?php echo $rows['msg']; ?></p>
-                        </div>
-                        <div class="ml-auto text-xs text-gray-500">6/1/2024</div>
-                    </div>
-                </a>
-            <?php } elseif ($rows['sender_Id'] == $login_user_id) { ?>
+                <?php
+                $userName  = $chatMessages->fetchData('users',  'id = ' . $rows['sender_Id'], 'id', 'desc');
+                foreach ($userName as $row) {
+                    $bg = '';
+                    if ($rows['receiver_Id'] == $_GET['c']) {
+                        $bg = 'red';
+                    }
+                ?>
 
-                <a href="chat.php?c=<?php echo $rows['receiver_Id'] ?>">
-                    <div class="flex items-center p-2 hover:bg-gray-100 cursor-pointer">
-                        <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
+                    <a href="chat.php?c=<?php echo $rows['sender_Id'] ?>">
+                        <div class="flex items-center bg-<?php echo $bg; ?>-500 p-2 hover:bg-gray-100 cursor-pointer">
+                            <div class="flex-shrink-0">
+                                <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-semibold"><?php echo $row['userName'] ?></h3>
+                                <p class="text-xs text-gray-500"><?php echo $rows['msg']; ?></p>
+                            </div>
+                            <div class="ml-auto text-xs text-gray-500">6/1/2024</div>
                         </div>
-                        <div class="ml-3">
-                            <h3 class="text-sm font-semibold"><?php echo $rows['receiver_Id']; ?></h3>
-                            <p class="text-xs text-gray-500"><?php echo $rows['msg']; ?></p>
+                    </a>
+
+                <?php
+                }
+            } elseif ($rows['sender_Id'] == $login_user_id) { ?>
+                <?php
+                $userName  = $chatMessages->fetchData('users',  'id = ' . $rows['receiver_Id'], 'id', 'desc');
+                foreach ($userName as $row) {
+                    $bg = '';
+                    if ($rows['receiver_Id'] == $_GET['c']) {
+                        $bg = 'red';
+                    }
+                ?>
+                    <a href="chat.php?c=<?php echo $rows['receiver_Id'] ?>">
+                        <div class="flex items-center  bg-<?php echo $bg; ?>-500 p-2 hover:bg-gray-100 cursor-pointer">
+                            <div class="flex-shrink-0">
+                                <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/150" alt="Profile Picture">
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-semibold"><?php echo $row['userName']; ?></h3>
+                                <p class="text-xs text-gray-500"><?php echo $rows['msg']; ?></p>
+                            </div>
+                            <div class="ml-auto text-xs text-gray-500">6/1/2024</div>
                         </div>
-                        <div class="ml-auto text-xs text-gray-500">6/1/2024</div>
-                    </div>
-                </a>
-            <?php } ?>
+                    </a>
+            <?php }
+            }
+            ?>
 
         <?php
         }
