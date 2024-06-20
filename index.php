@@ -1,7 +1,7 @@
 <?php
 require_once('public/functions/client-controller.php');
 $clientObject = new client_controller('admin2/includes/database_connection.php');
-$fetchProduct = $clientObject->fetchData('products', null, 'id', 'desc');
+$fetchProduct = $clientObject->fetchData('products', null, null, 'id', 'desc');
 ?>
 <!DOCTYPE html>
 <html lang="en">

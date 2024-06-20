@@ -1,3 +1,8 @@
+<?php
+require_once('functions/client-controller.php');
+$clientController = new client_controller('../admin2/includes/database_connection.php');
+$fetchProd = $clientController->fetchData('products', 'id = ' . $_GET['pid'], null, null)
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,44 +38,62 @@
                         Edit
                     </h2>
                 </div>
+
                 <div class="bg-white w-[45rem] mt-8 p-3 shadow-sm rounded-t border-b mt-3">
                     <div class="mt-1">
-                        <h2>Sanju International</h2>
+                        <?php
+                        if ($fetchProd) {
+                            foreach ($fetchProd as $rows) {
+                        ?>
+                                <h2><?php echo $rows['store_id']; ?> //It will replace with store name</h2>
 
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center">
-                                <img class="w-[3rem] h-[3rem] mt-5" src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="">
-                                <h2>
-                                    Pure leather wallet Money bag -Black
-                                </h2>
-                            </div>
-                            <div>
-                                <h2>Qty : 1</h2>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center gap-1">
+                                        <img class="w-[3rem] h-[3rem] mt-5" src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="">
+                                        <h2>
+                                            <?php echo $rows['product_title']; ?>
+                                        </h2>
+                                    </div>
+                                    <div>
+                                        <h2>Qty : 1</h2>
 
-                            </div>
-                            <div>
-                                <h2>৳ 777</h2>
-                            </div>
-                        </div>
+                                    </div>
+                                    <div>
+                                        <h2>৳ <?php echo number_format($rows['product_price']); ?></h2>
+                                    </div>
+                                </div>
+                            <?php }
+                        } else { ?>
+                            <h2>No product selected</h2>
+                        <?php } ?>
                     </div>
                 </div>
-               
+
             </div>
             <div class="height controller">
                 <div class="bg-white w-[23rem] mt-8 p-3 shadow-sm rounded">
                     <h2>Discount and Payment</h2>
-                    <div class="flex justify-between mt-3">
-                        <h2>Daraz Voucher Code</h2>
-                        <h2>Not Applicable</h2>
-                    </div>
-                    <div class="flex justify-between mt-3">
-                        <h2>Subtotal (1) items</h2>
-                        <h2>400</h2>
-                    </div>
-                    <div class="flex justify-between mt-3">
-                        <h2>Shipping Fee</h2>
-                        <h2>120</h2>
-                    </div>
+                    <?php
+                    if ($fetchProd) {
+                        foreach($fetchProd as $row){
+                    ?>
+                        <div class="flex justify-between mt-3">
+                            <h2>Daraz Voucher Code</h2>
+                            <h2>Not Applicable</h2>
+                        </div>
+                        <div class="flex justify-between mt-3">
+                            <h2>Subtotal (1) items</h2>
+                            <h2><?php echo number_format($rows['product_price']); ?></h2>
+                        </div>
+                        <div class="flex justify-between mt-3">
+                            <h2>Shipping Fee</h2>
+                            <h2>120</h2>
+                        </div>
+                    <?php } } else { ?>
+
+                        <h2>Something Went Wrong</h2>
+
+                    <?php } ?>
 
                     <div class="border mt-3 rounded flex gap-1 justify-between p-3 w-full">
                         <input type="text" class="p-1 w-full hover:border-0" placeholder="Enter Voucher Code">
@@ -83,7 +106,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
 
 </body>

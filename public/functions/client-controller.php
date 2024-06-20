@@ -9,13 +9,16 @@ class client_controller
         $this->connect = $databaseObject->connect();
     }
 
-    
 
-    public function fetchData($tableName, $whereColumn = NULL, $orderBy = NULL, $orderType)
+
+    public function fetchData($tableName, $whereColumn = NULL, $secondWhereColumn = null, $orderBy = NULL, $orderType)
     {
         $sql = "SELECT * FROM $tableName";
         if ($whereColumn !== null) {
             $sql .= " WHERE $whereColumn";
+        }
+        if($secondWhereColumn !== null){
+            $sql .=" AND $secondWhereColumn";
         }
         if ($orderBy !== NULL) {
             $sql .= " ORDER BY $orderBy $orderType";
@@ -35,6 +38,24 @@ class client_controller
         $sql = "DELETE FROM $table WHERE id = :id";
         $stmt = $this->connect->prepare($sql);
         $stmt->bindParam(":id", $id);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function insertData($data, $table)
+    {
+        $columns = implode(', ', array_keys($data));
+        $values = ':' . implode(', :', array_keys($data));
+        $sql = "INSERT INTO $table ($columns) VALUES ($values)";
+        $stmt = $this->connect->prepare($sql);
+
+        foreach ($data as $key => &$value) {
+            $stmt->bindParam(":$key", $value);
+        }
+
         if ($stmt->execute()) {
             return true;
         } else {

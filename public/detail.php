@@ -2,7 +2,26 @@
 require_once('functions/client-controller.php');
 require_once('../admin2/includes/session.php');
 $postsControl = new client_controller('../admin2/includes/database_connection.php');
-$product = $postsControl->fetchData('products', 'id = ' . $_GET['pro'], null, null)
+foreach ($_SESSION['userData'] as $key => $value) {
+    $login_user_id = $value['id'];
+}
+$product = $postsControl->fetchData('products', 'id = ' . $_GET['pro'], null, null,null);
+$msg = '';
+if (isset($_POST['cart'])) {
+    
+    $dataToInsert = [
+        'color' => $_POST['color'],
+        'size' => $_POST['size'],
+        'product_id' => $_GET['pro'],
+        'user_id' => $login_user_id,
+    ];
+    $insertToCart = $postsControl->insertData($dataToInsert, 'cart');
+    if ($insertToCart) {
+        $msg = 'Added to cart';
+    } else {
+        $msg = 'Something went wrong. Try again later.';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -107,27 +126,32 @@ $product = $postsControl->fetchData('products', 'id = ' . $_GET['pro'], null, nu
                     </div>
                     <div class="bg-white border w-[19rem] p-2">
                         <h2>4900$</h2>
-                        <div class="flex gap-4 mt-5">
-                            <select class="border p-2 w-full rounded" name="" id="">
-                                <option value="M">M</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                                <option value="XXXL">XXXL</option>
-                            </select>
+                        <form action="detail.php?pro=<?php echo $_GET['pro'] ?>" method="POST" enctype="multipart/form-data">
+                            <div class="flex gap-4 mt-5">
+                                <select class="border p-2 w-full rounded" name="size" id="size">
+                                    <option value="M">M</option>
+                                    <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
+                                    <option value="XXXL">XXXL</option>
+                                </select>
 
-                            <select class="border p-2 w-full rounded" name="" id="">
-                                <option value="Color">Color</option>
-                                <option value="Black">Black</option>
-                                <option value="Pink">Pink</option>
-                                <option value="Gray">Gray</option>
-                                <option value="Red">Red</option>
-                            </select>
-                        </div>
-                        <div class="mt-4">
+                                <select class="border p-2 w-full rounded" name="color" id="color">
+                                    <option value="Color">Color</option>
+                                    <option value="Black">Black</option>
+                                    <option value="Pink">Pink</option>
+                                    <option value="Gray">Gray</option>
+                                    <option value="Red">Red</option>
+                                </select>
+                            </div>
+                            <button name="cart" class="bg-blue-100 mt-4 text-center text-gray-500 border p-2 w-full rounded border mb-4">Add to cart</button>
+
+                        </form>
+
+
+                        <div class="mt-2">
                             <a href="checkout.php?pid=<?php echo $rows['id'] ?>&pn=<?php echo $rows['product_title'] ?>">
                                 <button class="bg-blue-300 text-center text-white border p-2 w-full rounded border mb-4">Buy Now</button>
                             </a>
-                            <button class="bg-blue-100 text-center text-gray-500 border p-2 w-full rounded border mb-4">Add to cart</button>
                             <button class="bg-blue-50 text-center text-gray-800 border p-2 w-full rounded border mb-4">Add to wishlist</button>
 
                             <div class="mt-6 rounded items-center border border-gray-400 mt-5 bg-gray-100 p-2 w-[7rem]">
@@ -168,6 +192,8 @@ $product = $postsControl->fetchData('products', 'id = ' . $_GET['pro'], null, nu
             </p>
         </div>
     </div>
+
+
 </body>
 
 </html>
