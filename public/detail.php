@@ -124,12 +124,14 @@ $product = $postsControl->fetchData('products', 'id = ' . $_GET['pro'], null, nu
                             </select>
                         </div>
                         <div class="mt-4">
-                            <button class="bg-blue-300 text-center text-white border p-2 w-full rounded border mb-4">Buy Now</button>
+                            <a href="checkout.php?pid=<?php echo $rows['id'] ?>&pn=<?php echo $rows['product_title'] ?>">
+                                <button class="bg-blue-300 text-center text-white border p-2 w-full rounded border mb-4">Buy Now</button>
+                            </a>
                             <button class="bg-blue-100 text-center text-gray-500 border p-2 w-full rounded border mb-4">Add to cart</button>
                             <button class="bg-blue-50 text-center text-gray-800 border p-2 w-full rounded border mb-4">Add to wishlist</button>
 
                             <div class="mt-6 rounded items-center border border-gray-400 mt-5 bg-gray-100 p-2 w-[7rem]">
-                                <a class="flex gap-2" href="chat/chat.php?c=<?php echo $rows['store_id'] ?>">
+                                <a class="flex gap-2" href="chat/chat.php?c=<?php echo $rows['store_id'] ?>&pro=<?php echo $_GET['pro'] ?>&pn=<?php echo $rows['product_title'] ?>">
                                     <h2>Chat</h2>
                                     <span>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

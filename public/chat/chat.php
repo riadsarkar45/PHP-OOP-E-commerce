@@ -81,7 +81,12 @@ $msg = '';
             <div class="flex-none p-4 border-b border-gray-200">
                 <h2 class="text-xl font-bold">Mahfuzur Rahaman Sir Bank (MNG)</h2>
                 <p class="text-sm text-gray-500">Last seen today at 5:39 PM</p>
+                <button id="sendProductBtn" class="bg-green-500 p-2 rounded mt-4 bg-opacity-35 border text-white font-bold text-serif border-green-500">Send Product</button>
+                <div id="result"></div>
+
             </div>
+
+
 
             <div id="history" class="flex-1 overflow-y-auto p-4 space-y-4">
                 <?php
@@ -89,6 +94,7 @@ $msg = '';
                     foreach ($chatHistory as $rows) {
 
                 ?>
+
 
                         <?php
 
@@ -139,8 +145,6 @@ $msg = '';
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    
-
     function get_chats_instantly() {
         jQuery.ajax({
             url: 'instant-chat-history.php?c=<?php echo $_GET['c']; ?>',
@@ -167,34 +171,32 @@ $msg = '';
 
 
 
-
-
-
     $(document).ready(function() {
-      $('#myForm').submit(function(e) {
-        e.preventDefault();
+        $('#myForm').submit(function(e) {
+            e.preventDefault();
 
-        var formData = new FormData(this);
+            var formData = new FormData(this);
 
-        $.ajax({
-          type: 'POST',
-          url: 'insert-chat.php?c=<?php echo $_GET['c']; ?>',
-          data: formData,
-          contentType: false,
-          processData: false,
-          success: function(response) {
-            $('#name').val('');
-            $('#file').val('');
-            $('#result').html(response);
-          },
-          error: function(xhr, status, error) {
-            alert('AJAX request error: ' + error);
-          }
+            $.ajax({
+                type: 'POST',
+                url: 'insert-chat.php?c=<?php echo $_GET['c']; ?>',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    $('#name').val('');
+                    $('#file').val('');
+                    $('#result').html(response);
+                },
+                error: function(xhr, status, error) {
+                    alert('AJAX request error: ' + error);
+                }
+            });
         });
-      });
     });
-
-    
 </script>
+
+
+
 
 </html>

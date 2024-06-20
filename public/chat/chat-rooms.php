@@ -7,6 +7,8 @@ class Chat_rooms
     private $receiverId;
     private $message;
 
+    private $productId;
+
     public function __construct($databasePath)
     {
         require_once($databasePath);
@@ -54,15 +56,24 @@ class Chat_rooms
         return $this->userId;
     }
 
+    function setProductId($productId){
+        return $this->productId = $productId;
+    }
+
+    function getProductId(){
+        return $this->productId;
+    }
+
     function insertChat()
     {
         $status = 'OFF';
-        $query = "INSERT INTO chats (sender_id, receiver_id, msg, userId, status) VALUES (:sender_id, :receiver_id, :message, :userId, :status)";
+        $query = "INSERT INTO chats (sender_id, receiver_id, msg, userId, product_id, status) VALUES (:sender_id, :receiver_id, :message, :userId, :product_id, :status)";
         $stmt = $this->connect->prepare($query);
         $stmt->bindParam(':sender_id', $this->senderId, PDO::PARAM_INT);
         $stmt->bindParam(':receiver_id', $this->receiverId, PDO::PARAM_INT);
         $stmt->bindParam(':message', $this->message, PDO::PARAM_STR);
         $stmt->bindParam(':userId', $this->userId, PDO::PARAM_INT);
+        $stmt->bindParam(':product_id', $this->productId, PDO::PARAM_INT);
         $stmt->bindParam(':status', $status, PDO::PARAM_STR);
 
         if ($stmt->execute()) {
@@ -129,7 +140,7 @@ class Chat_rooms
         }
     }
 
-    function getChatLists($senderId, $receiverId, $sessionId)
+    function getChatLists($sessionId)
     {
         $query = "SELECT * FROM chat_list WHERE sender_Id = :sender_Id or receiver_Id = :receiver_Id";
         $stmt = $this->connect->prepare($query);
@@ -162,4 +173,6 @@ class Chat_rooms
             return false;
         }
     }
+
+    
 }

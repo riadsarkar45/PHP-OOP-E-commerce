@@ -4,9 +4,9 @@ include('../../admin2/includes/session.php');
 require_once('chat-rooms.php');
 $chatMessages = new Chat_rooms('../../admin2/includes/database_connection.php');
 foreach ($_SESSION['userData'] as $key => $value) {
-    $login_user_id = $value['id'];
+    $login_user_id = $value['store_id'];
 }
-$chatList = $chatMessages->getChatLists($login_user_id, $_GET['c'], $login_user_id);
+$chatList = $chatMessages->getChatLists($login_user_id);
 
 ?>
 
@@ -22,7 +22,7 @@ $chatList = $chatMessages->getChatLists($login_user_id, $_GET['c'], $login_user_
 
             <?php if ($rows['receiver_Id'] == $login_user_id) { ?>
                 <?php
-                $userName  = $chatMessages->fetchData('users',  'id = ' . $rows['sender_Id'], 'id', 'desc');
+                $userName  = $chatMessages->fetchData('users',  'store_id = ' . $rows['sender_Id'], 'id', 'desc');
                 foreach ($userName as $row) {
                     $bg = '';
                     if ($rows['receiver_Id'] == $_GET['c']) {
@@ -47,7 +47,7 @@ $chatList = $chatMessages->getChatLists($login_user_id, $_GET['c'], $login_user_
                 }
             } elseif ($rows['sender_Id'] == $login_user_id) { ?>
                 <?php
-                $userName  = $chatMessages->fetchData('users',  'id = ' . $rows['receiver_Id'], 'id', 'desc');
+                $userName  = $chatMessages->fetchData('users',  'store_id = ' . $rows['receiver_Id'], 'id', 'desc');
                 foreach ($userName as $row) {
                     $bg = '';
                     if ($rows['receiver_Id'] == $_GET['c']) {
