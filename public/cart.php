@@ -6,7 +6,6 @@ foreach ($_SESSION['userData'] as $key => $value) {
     $login_user_id = $value['id'];
 }
 $cartItem = $postsControl->fetchData('cart', 'user_id = ' . $login_user_id, null, null, null);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,22 +14,23 @@ $cartItem = $postsControl->fetchData('cart', 'user_id = ' . $login_user_id, null
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <title>Document</title>
+    <title>Shopping Cart</title>
 </head>
 
 <body class="bg-gray-100 font-serif">
     <!-- header section start -->
-    <?php require_once('includes/include-header.php') ?>
+    <?php require_once('includes/include-header.php'); ?>
     <!-- header section end -->
     <div class="w-[70rem] m-auto mt-5">
         <div class="container mx-auto p-4">
             <div class="flex flex-col md:flex-row md:space-x-4">
                 <div class="w-full md:w-2/3 bg-white p-4 rounded-lg shadow">
                     <h2 class="text-2xl font-bold mb-4">Shopping Bag</h2>
-                    <p class="mb-4"><?php echo count($cartItem) ?> items in your bag</p>
+                    <p class="mb-4"><?php echo count($cartItem); ?> items in your bag</p>
                     <?php
                     $total = 0; // Initialize total cost
+                    $itemsByStore = []; // Initialize an array to group items by store
+
                     if ($cartItem) {
                         foreach ($cartItem as $row) {
                             $getProductDetail = $postsControl->fetchData('products', 'id = ' . $row['product_id'], null, null, null);
@@ -38,51 +38,60 @@ $cartItem = $postsControl->fetchData('cart', 'user_id = ' . $login_user_id, null
                                 $pro = $rows['product_price'];
                                 $total += $pro;
 
+                                $getStoreName = $postsControl->fetchData('store_name', 'id = ' . $rows['store_id'], null, null, null);
+                                foreach ($getStoreName as $str) {
+                                    $storeName = $str['name'];
+                                    if (!isset($itemsByStore[$storeName])) {
+                                        $itemsByStore[$storeName] = [];
+                                    }
+                                    $itemsByStore[$storeName][] = [
+                                        'product_title' => $rows['product_title'],
+                                        'product_price' => $rows['product_price'],
+                                        'size' => $row['size'],
+                                        'color' => $row['color']
+                                    ];
+                                }
+                            }
+                        }
+
+                        foreach ($itemsByStore as $storeName => $items) {
+                            echo "<h2 class='text-xl font-bold mb-4'>$storeName</h2>";
+                            foreach ($items as $item) {
                     ?>
                                 <div class="flex items-center justify-between border-b pb-4 mb-4">
                                     <div class="flex items-center">
-                                        <img src="https://via.placeholder.com/80" alt="Product 1" class="w-20 h-20 object-cover rounded-lg">
+                                        <div>
+                                            <img src="https://via.placeholder.com/80" alt="Product 1" class="w-20 h-20 object-cover rounded-lg">
+                                        </div>
                                         <div class="ml-4">
-                                            <h3 class="font-semibold"><?php echo $rows['product_title']; ?></h3>
-                                            <p class="text-gray-500">Size: <?php echo $row['size']; ?></p>
-                                            <p class="text-gray-500">Color: <?php echo $row['color']; ?></p>
+                                            <h3 class="font-semibold"><?php echo $item['product_title']; ?></h3>
+                                            <p class="text-gray-500">Size: <?php echo $item['size']; ?></p>
+                                            <p class="text-gray-500">Color: <?php echo $item['color']; ?></p>
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-lg font-semibold"><?php echo number_format($rows['product_price']); ?></p>
-
+                                        <p class="text-lg font-semibold"><?php echo number_format($item['product_price']); ?></p>
                                     </div>
                                 </div>
-
-                        <?php }
+                    <?php
+                            }
                         }
-                    } else { ?>
-                        <h2>No product found in your cart</h2>
-                    <?php } ?>
+                    } else {
+                        echo "<h2>No product found in your cart</h2>";
+                    }
+                    ?>
                     <div class="flex justify-between">
-                        <p class="text-lg font-semibold">Total: <?php echo number_format($total); ?></p>
+                        <p class="text-lg font-semibold">Total: <?php echo number_format($total + 100); ?></p>
                     </div>
                 </div>
 
                 <div class="height-controller">
                     <div class="w-[22rem] bg-white p-4 rounded-lg shadow mt-4 md:mt-0">
                         <h2 class="text-2xl font-bold mb-4">Calculated Shipping</h2>
-                        <div class="mb-4">
-                            <label for="country" class="block text-gray-700">Country</label>
-                            <select id="country" class="w-full p-2 border rounded">
-                                <option>United States</option>
-                                <option>Canada</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                        <div class="mb-4">
-                            <label for="zip" class="block text-gray-700">Zip Code</label>
-                            <input type="text" id="zip" class="w-full p-2 border rounded" placeholder="Zip Code">
-                        </div>
-                        <button class="w-full bg-blue-500 text-white p-2 rounded">Update</button>
-                        <h2 class="text-2xl font-bold mt-6 mb-4">Coupon Code</h2>
-                        <input type="text" class="w-full p-2 border rounded mb-4" placeholder="Coupon Code">
-                        <button class="w-full bg-blue-500 text-white p-2 rounded">Apply</button>
+                        <form action="checkout.php" method="post" enctype="multipart/form-data">
+                            <input class="w-full p-2 border mb-4 rounded" name="cartItems" value='<?php echo htmlspecialchars(json_encode($cartItem)); ?>'>
+                            <button name="checkout" class="w-full bg-blue-500 text-white p-2 rounded uppercase">Proceed To Checkout</button>
+                        </form>
                     </div>
                 </div>
             </div>

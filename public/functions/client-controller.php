@@ -17,8 +17,8 @@ class client_controller
         if ($whereColumn !== null) {
             $sql .= " WHERE $whereColumn";
         }
-        if($secondWhereColumn !== null){
-            $sql .=" AND $secondWhereColumn";
+        if ($secondWhereColumn !== null) {
+            $sql .= " AND $secondWhereColumn";
         }
         if ($orderBy !== NULL) {
             $sql .= " ORDER BY $orderBy $orderType";
@@ -60,6 +60,25 @@ class client_controller
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function confirmOrder($orderedProducts)
+    {
+        $qty = 33;
+        foreach ($orderedProducts as $row) {
+            $sql = "INSERT INTO orders (user_id, date, product_id, qty) VALUES (:user_id, :date, :product_id, :qty)";
+            $inst = $this->connect->prepare($sql);
+            $inst->bindParam(':user_id', $row['user_id']);
+            $inst->bindParam(':date', $row['date']);
+            $inst->bindParam(':product_id', $row['product_id']);
+            $inst->bindParam(':qty', $qty);
+            $inst->execute();
+            if ($inst) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }
