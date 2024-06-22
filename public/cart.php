@@ -26,14 +26,14 @@ $cartItem = $postsControl->fetchData('cart', 'user_id = ' . $login_user_id, null
             <div class="flex flex-col md:flex-row md:space-x-4">
                 <div class="w-full md:w-2/3 bg-white p-4 rounded-lg shadow">
                     <h2 class="text-2xl font-bold mb-4">Shopping Bag</h2>
-                    <p class="mb-4"><?php echo count($cartItem); ?> items in your bag</p>
+                    <p class="mb-4"><?php // echo count($cartItem); ?> items in your bag</p>
                     <?php
                     $total = 0; // Initialize total cost
                     $itemsByStore = []; // Initialize an array to group items by store
 
                     if ($cartItem) {
                         foreach ($cartItem as $row) {
-                            $getProductDetail = $postsControl->fetchData('products', 'id = ' . $row['product_id'], null, null, null);
+                            $getProductDetail = $postsControl->fetchData('products', 'product_id = ' . $row['product_id'], null, null, null);
                             foreach ($getProductDetail as $rows) {
                                 $pro = $rows['product_price'];
                                 $total += $pro;
@@ -88,10 +88,8 @@ $cartItem = $postsControl->fetchData('cart', 'user_id = ' . $login_user_id, null
                 <div class="height-controller">
                     <div class="w-[22rem] bg-white p-4 rounded-lg shadow mt-4 md:mt-0">
                         <h2 class="text-2xl font-bold mb-4">Calculated Shipping</h2>
-                        <form action="checkout.php" method="post" enctype="multipart/form-data">
-                            <input class="w-full p-2 border mb-4 rounded" name="cartItems" value='<?php echo htmlspecialchars(json_encode($cartItem)); ?>'>
-                            <button name="checkout" class="w-full bg-blue-500 text-white p-2 rounded uppercase">Proceed To Checkout</button>
-                        </form>
+                           <a href="checkout.php?p=<?php echo md5('cart') ?>"> <button name="checkout" class="w-full bg-blue-500 text-white p-2 rounded uppercase">Proceed To Checkout</button></a>
+                        
                     </div>
                 </div>
             </div>

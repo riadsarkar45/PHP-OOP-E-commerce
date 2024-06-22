@@ -5,7 +5,7 @@ $postsControl = new client_controller('../admin2/includes/database_connection.ph
 foreach ($_SESSION['userData'] as $key => $value) {
     $login_user_id = $value['id'];
 }
-$product = $postsControl->fetchData('products', 'id = ' . $_GET['pro'], null, null,null);
+$product = $postsControl->fetchData('products', 'product_id = ' . $_GET['pro'], null, null,null);
 $msg = '';
 if (isset($_POST['cart'])) {
     
@@ -149,7 +149,7 @@ if (isset($_POST['cart'])) {
 
 
                         <div class="mt-2">
-                            <a href="checkout.php?pid=<?php echo $rows['id'] ?>&pn=<?php echo $rows['product_title'] ?>">
+                            <a href="checkout.php?pid=<?php echo $rows['product_id'] ?>&pn=<?php echo $rows['product_title'] ?>">
                                 <button class="bg-blue-300 text-center text-white border p-2 w-full rounded border mb-4">Buy Now</button>
                             </a>
                             <button class="bg-blue-50 text-center text-gray-800 border p-2 w-full rounded border mb-4">Add to wishlist</button>

@@ -1,7 +1,7 @@
 <?php
 require_once('public/functions/client-controller.php');
 $clientObject = new client_controller('admin2/includes/database_connection.php');
-$fetchProduct = $clientObject->fetchData('products', null, null, 'id', 'desc');
+$fetchProduct = $clientObject->fetchData('products', null, null, 'product_id', 'desc');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -165,7 +165,7 @@ $fetchProduct = $clientObject->fetchData('products', null, null, 'id', 'desc');
                     foreach ($fetchProduct as $rows) {
 
                 ?>
-                        <a href="public/detail.php?pro=<?php echo $rows['id']   ?>">
+                        <a href="public/detail.php?pro=<?php echo $rows['product_id']   ?>">
                             <div class="bg-white p-2 w-[13.6rem] h-[18rem]">
                                 <img class="w-full h-[13rem]" src="https://i.ibb.co/2Z48c6b/product-01.jpg" alt="">
                                 <div>
