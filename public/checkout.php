@@ -16,8 +16,6 @@ if (isset($_GET['p'])) {
 }
 
 
-
-
 $orderMsg = "";
 if (isset($_POST['order'])) {
     foreach ($cartItems as $cart) {
@@ -27,6 +25,7 @@ if (isset($_POST['order'])) {
             'product_id' => $cart['product_id'],
             'qty' => $cart['product_id'],
             'store_id' => $cart['store_id'],
+            'status' => 'OFF',
         ];
         $insertData = $clientController->insertData($dataToInsert, 'orders');
     }
@@ -67,7 +66,7 @@ if (isset($_POST['order'])) {
                     <h2>Email to sarkarriad92@gimail.com Edit</h2>
                 </div>
 
-                <div class=" w-[45rem] mt-2 m-auto rounded mt-3">
+                <div class=" w-[45rem] mt-2 mb-6 m-auto rounded mt-3">
                     <?php
                     if ($cartItems) {
                         $itemsByStore = [];

@@ -5,10 +5,10 @@ $postsControl = new client_controller('../admin2/includes/database_connection.ph
 foreach ($_SESSION['userData'] as $key => $value) {
     $login_user_id = $value['id'];
 }
-$product = $postsControl->fetchData('products', 'product_id = ' . $_GET['pro'], null, null,null);
+$product = $postsControl->fetchData('products', 'product_id = ' . $_GET['pro'], null, null, null);
 $msg = '';
 if (isset($_POST['cart'])) {
-    
+
     $dataToInsert = [
         'color' => $_POST['color'],
         'size' => $_POST['size'],
@@ -37,13 +37,13 @@ if (isset($_POST['cart'])) {
     <!-- header section start -->
     <?php require_once('includes/include-header.php') ?>
     <!-- header section end -->
-    <div class="w-[70rem] m-auto mt-8 bg-white">
+    <div class="w-[70rem] m-auto mt-8 ">
         <?php
         if ($product) {
             foreach ($product as $rows) {
 
         ?>
-                <div class="flex ">
+                <div class="flex bg-white shadow justify-between">
                     <div class="flex gap-4  p-2">
                         <div>
                             <img class="w-[25rem] h-[25rem]" src="https://i.ibb.co/DDTKcqs/terry-vlisidis-Ws-Ebnsn-Kb-UE-unsplash.jpg" alt="">
@@ -174,7 +174,7 @@ if (isset($_POST['cart'])) {
             ?>
             <h2>This product is may missing or deleted</h2>
         <?php } ?>
-        <div class="bg-white mt-4 p-2">
+        <div class="bg-white mt-4 shadow p-2">
             <h2 class="text-2xl border-b p-2">
                 Specification
             </h2>
@@ -190,6 +190,95 @@ if (isset($_POST['cart'])) {
                 Possimus sunt error rerum veniam. Animi consequatur error necessitatibus? Error, obcaecati eveniet eligendi ipsa placeat iste cupiditate minus odio a voluptas ducimus atque corporis, unde delectus consequatur sapiente architecto. Quo!
                 Impedit alias repudiandae libero molestiae distinctio quaerat sequi reprehenderit eveniet voluptatem dolore debitis explicabo, est, laboriosam quasi totam voluptates, quas corrupti. Quod soluta quam quisquam doloremque molestiae officia iusto odit?
             </p>
+        </div>
+        <div class=" mt-4 ">
+            <h2 class="text-xl bg-white border-b p-2">
+                Reviews
+            </h2>
+            <div class="bg-white mt-2 mb-2 shadow p-2 rounded flex  justify-between">
+                <div>
+                    <h2 class="font-bold">User Name</h2>
+                    <div class="w-7rem">
+                        <p class="w-[40rem]">
+                            Dolores non pariatur
+                            magni similique minus amet veniam vel
+                            sint eius aspernatur officiis commodi ab, est
+                            veritatis reiciendis! Fuga aliquid atque esse.
+                        </p>
+                        <div class="flex gap-1 mt-1">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-sm text-gray-900" >2 days ago</h2>
+                </div>
+            </div>
+            <div class="bg-white mt-2 mb-2 shadow p-2 rounded flex  justify-between">
+                <div>
+                    <h2 class="font-bold">User Name</h2>
+                    <div class="w-7rem">
+                        <p class="w-[40rem]">
+                            Dolores non pariatur
+                            magni similique minus amet veniam vel
+                            sint eius aspernatur officiis commodi ab, est
+                            veritatis reiciendis! Fuga aliquid atque esse.
+                        </p>
+                        <div class="flex gap-1 mt-1">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-sm text-gray-900" >2 days ago</h2>
+                </div>
+            </div>
+            <div class="bg-white mt-2 mb-2 p-2 rounded flex  justify-between">
+                <div>
+                    <h2 class="font-bold">User Name</h2>
+                    <div class="w-7rem">
+                        <p class="w-[40rem]">
+                            Dolores non pariatur
+                            magni similique minus amet veniam vel
+                            sint eius aspernatur officiis commodi ab, est
+                            veritatis reiciendis! Fuga aliquid atque esse.
+                        </p>
+                        <div class="flex gap-1 mt-1">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-sm text-gray-900" >2 days ago</h2>
+                </div>
+            </div>
+            <div class="bg-white mt-2 mb-2 shadow p-2 rounded flex  justify-between">
+                <div>
+                    <h2 class="font-bold">User Name</h2>
+                    <div class="w-7rem">
+                        <p class="w-[40rem]">
+                            Dolores non pariatur
+                            magni similique minus amet veniam vel
+                            sint eius aspernatur officiis commodi ab, est
+                            veritatis reiciendis! Fuga aliquid atque esse.
+                        </p>
+                        <div class="flex gap-1 mt-1">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                            <img src="https://i.ibb.co/0ZZFhPN/ddddddddddddddddddddd.jpg" alt="" class="w-[4rem] h-[4rem]">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-sm text-gray-900" >2 days ago</h2>
+                </div>
+            </div>
         </div>
     </div>
 

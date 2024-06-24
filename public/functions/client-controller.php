@@ -33,11 +33,10 @@ class client_controller
         }
     }
 
-    public function deleteData($id, $table)
+    public function deleteData($whereColumn, $table)
     {
-        $sql = "DELETE FROM $table WHERE id = :id";
+        $sql = "DELETE FROM $table $whereColumn";
         $stmt = $this->connect->prepare($sql);
-        $stmt->bindParam(":id", $id);
         if ($stmt->execute()) {
             return true;
         } else {
@@ -63,22 +62,22 @@ class client_controller
         }
     }
 
-    public function confirmOrder($orderedProducts)
+    public function editData($data, $tableName, $whereClause)
     {
-        $qty = 33;
-        foreach ($orderedProducts as $row) {
-            $sql = "INSERT INTO orders (user_id, date, product_id, qty) VALUES (:user_id, :date, :product_id, :qty)";
-            $inst = $this->connect->prepare($sql);
-            $inst->bindParam(':user_id', $row['user_id']);
-            $inst->bindParam(':date', $row['date']);
-            $inst->bindParam(':product_id', $row['product_id']);
-            $inst->bindParam(':qty', $qty);
-            $inst->execute();
-            if ($inst) {
-                return true;
-            } else {
-                return false;
-            }
+        $setPart = '';
+        foreach ($data as $column => $value) {
+            $setPart .= "$column = :$column, ";
+        }
+        $setPart = rtrim($setPart, ', ');
+        $sql = "UPDATE $tableName SET $setPart WHERE $whereClause";
+        $stmt = $this->connect->prepare($sql);
+        foreach ($data as $column => &$value) {
+            $stmt->bindParam(":$column", $value);
+        }
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
